@@ -8,6 +8,7 @@ import {
   deleteUserById,
   getUserById,
   updateUserById,
+  getAllUsers,
 } from "../controllers/authController.js";
 
 import { authenticate, authorizeAdmin } from "../middleware/authMiddleware.js";
@@ -26,9 +27,9 @@ router
   .put(authenticate, updateCurrentUserProfile); // Only authenticated users can update their profile
 
 // ADMIN ROUTES (Authenticated & Admin only)
-// router
-//   .route("/")
-//   .get(authenticate, authorizeAdmin, getAllUsers); // Admin route to get all users
+router
+  .route("/")
+  .get(authenticate, authorizeAdmin, getAllUsers); // Admin route to get all users
 
 router
   .route("/:id")

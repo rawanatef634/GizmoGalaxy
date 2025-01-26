@@ -10,8 +10,8 @@ import {
 
 import { authenticate, authorizeAdmin } from "../middleware/authMiddleware.js";
 
-router.route("/").post(authenticate, authorizeAdmin, createCategory);
-router.route("/:categoryId").put(authenticate, authorizeAdmin, updateCategory);
+router.route("/").post( createCategory);
+router.route("/:categoryId").put(authenticate, updateCategory);
 router
   .route("/:categoryId")
   .delete(authenticate, authorizeAdmin, removeCategory);
