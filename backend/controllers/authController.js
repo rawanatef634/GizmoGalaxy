@@ -1,67 +1,53 @@
 import asyncHandler from "../middleware/asyncHandler.js";
 import User from "../models/User.js";
-import { generateToken } from "../utils/generateToken.js";
-import logger from '../config/logger.js'
+import { generateToken } from "../utils/createToken.js";
+
 export const registerUser = asyncHandler(async (req, res) => {
-    const { username, email, password } = req.body
+  const { username, email, password, role } = req.body;
 
-    if (!username || !email || !password) {
-        return res.status(400).json({ message: "All fields are required"})
-    }
-    try {
-        const existingUser = await User.findOne({ email})
-        if (existingUser) {
-            return res.status(400).json({ message: "User already exists"})
-        }
-        const newUser = new User({
-            username,
-            email,
-            password,
-            role: 'customer'}) 
-        await newUser.save()
-        res.status(201).json({ message: "User registered successfully"})
-    } catch (error) {
-      res.status(400);
-      throw new Error("Invalid user data");
-    }
-})
+  if (!username || !email || !password) {
+      return res.status(400).json({ message: "All fields are required" });
+  }
 
+  const existingUser = await User.findOne({ email }).select( "+password" );
+  if (existingUser) {
+      return res.status(400).json({ message: "User already exists" });
+  }
+
+  const newUser = new User({ username, email, password, role: role || "customer" });
+  await newUser.save();
+
+  // ✅ Generate Token & Set Cookie
+  generateToken(newUser._id, res);
+
+  res.status(201).json({ message: "User registered successfully", user: newUser });
+});
 export const loginUser = asyncHandler(async (req, res) => {
   const { email, password } = req.body;
-  try {
-      const existingUser = await User.findOne({ email }).select('+password');
-      if (!existingUser) {
-          return res.status(400).json({ message: "User doesn't exist" });
-      }
 
-      // Check if the password matches
-      const isPasswordCorrect = await existingUser.matchPassword(password);
-      if (!isPasswordCorrect) {
-          return res.status(400).json({ message: "Invalid credentials" });
-      }
-      console.log(existingUser.password)
-      console.log(isPasswordCorrect)
-      // Generate tokens
-      const accessToken = generateToken(existingUser, res, false); // Access token (sent to user)
-      generateToken(existingUser, res, true); // Refresh token (stored in cookie)
+  const user = await User.findOne({ email }).select("+password");
+  if (!user) return res.status(400).json({ message: "User doesn't exist" });
 
-      // Log token for debugging purposes
-      logger.info(`Access Token: ${accessToken}`);
+  const isPasswordCorrect = await user.matchPassword(password);
+  if (!isPasswordCorrect) return res.status(400).json({ message: "Invalid credentials" });
 
-      res.status(200).json({
-          message: "User logged in successfully",
-          accessToken, // Return access token here
-      });
-  } catch (error) {
-      res.status(400);
-      throw new Error("Invalid user data");
-  }
+  generateToken(user._id, res);
+
+  res.status(200).json({
+          _id: user._id,
+          username: user.username,
+          email: user.email,
+          role: user.role,
+  });
 });
 
 
-export const logoutUser = asyncHandler(async(req, res) => {
-    res.cookie('refreshToken', '', { maxAge: 0 });
-    res.status(200).json({ message: 'Logged out successfully' });
+export const logoutUser = asyncHandler(async (req, res) => {
+    res.cookie("jwt", "", { 
+      httpOnly: true,
+      expires: new Date(0)
+    });
+    res.status(200).json({ message: "Logged out successfully" });
 });
 
 export const getAllUsers = asyncHandler(async (req, res) => {

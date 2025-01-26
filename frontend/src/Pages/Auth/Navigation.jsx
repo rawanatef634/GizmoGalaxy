@@ -18,7 +18,6 @@ import { logout } from "../../redux/features/auth/authSlice";
 const Navigation = () => {
   const { userInfo } = useSelector((state) => state.auth);
   // const { cartItems } = useSelector((state) => state.cart);
-
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [showSidebar, setShowSidebar] = useState(false);
 
@@ -101,6 +100,7 @@ const Navigation = () => {
         >
           {userInfo ? (
             <span className="text-white">{userInfo.username}</span>
+            
           ) : (
             <></>
           )}
@@ -125,12 +125,15 @@ const Navigation = () => {
         </button>
 
         {dropdownOpen && userInfo && (
+          
           <ul
             className={`absolute right-0 mt-2 mr-14 space-y-2 bg-white text-gray-600 ${
-              !userInfo.isAdmin ? "-top-20" : "-top-80"
+              !userInfo.role === "admin" ? "-top-80" : "-top-20"
             } `}
+            
           >
-            {userInfo.isAdmin && (
+            
+            {userInfo.role === "admin" && (              
               <>
                 <li>
                   <Link
@@ -191,6 +194,7 @@ const Navigation = () => {
           </ul>
         )}
         {!userInfo && (
+          
           <ul>
             <li>
               <Link
