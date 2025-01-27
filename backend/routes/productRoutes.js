@@ -33,7 +33,7 @@ router
   .route("/:id")
   .get(fetchProductById)
   .put(authenticate, authorizeAdmin, formidable(), updateProductDetails)
-  .delete(authenticate, authorizeAdmin, removeProduct);
+  .delete( removeProduct);
 
 router.route("/filtered-products").post(filterProducts);
 

@@ -6,14 +6,16 @@ import cartRoutes from "./routes/cartRoutes.js";
 import orderRoutes from "./routes/orderRoutes.js";
 import paymentRoutes from "./routes/paymentRoutes.js";
 import categoryRoutes from "./routes/categoryRoutes.js";
+import uploadRoutes from "./routes/uploadRoutes.js";
 import logger from "./config/logger.js";
 import rateLimit from 'express-rate-limit';
 import errorMiddleware from "./middleware/errorMiddleware.js";
 import dotenv from 'dotenv';
 import cookieParser from "cookie-parser";
 import cors from "cors";
+import path from "path";
 const app = express();
-const PORT = 5000
+const port = process.env.PORT || 5000;
 dotenv.config();
 connectDB();
 const limiter = rateLimit({
@@ -39,6 +41,7 @@ app.use("/api/category", categoryRoutes);
 app.use("/api/carts", cartRoutes);
 app.use("/api/orders", orderRoutes);
 app.use("/api/payments", paymentRoutes);
+app.use('/api/upload', uploadRoutes)
 app.use(errorMiddleware);
 app.use((req, res, next) => {
   console.log("Cookies Received:", req.cookies);
@@ -47,6 +50,8 @@ app.use((req, res, next) => {
 
 logger.info("Server is running on port 3000");
 
-app.listen(PORT, () => {
-    console.log(`Server is running on port ${PORT}`);
+app.use("/uploads", express.static("uploads"));
+
+app.listen(port, () => {
+    console.log(`Server is running on port ${port}`);
 })
