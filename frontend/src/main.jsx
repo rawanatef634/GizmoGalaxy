@@ -22,7 +22,7 @@ import AllProducts from "./Pages/Admin/AllProducts";
 import ProductUpdate from "./Pages/Admin/ProductUpdate";
 
 import Home from "./Pages/Home.jsx";
-import Favourites from "./Pages/Products/Favourites.jsx";
+import Favorites from "./Pages/Products/Favorites.jsx";
 import ProductDetails from "./Pages/Products/ProductDetails.jsx";
 
 import Cart from "./Pages/Cart.jsx";
@@ -42,7 +42,7 @@ const router = createBrowserRouter(
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Register />} />
       <Route index={true} path="/" element={<Home />} />
-      <Route path="/favorite" element={<Favourites />} />
+      <Route path="/favorite" element={<Favorites />} />
       <Route path="/product/:id" element={<ProductDetails />} />
       <Route path="/cart" element={<Cart />} />
       <Route path="/shop" element={<Shop />} />

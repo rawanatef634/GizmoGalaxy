@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import moment from "moment";
-import { useAllProductsQuery } from "../../redux/api/productSApiSlice";
+import { useAllProductsQuery } from "../../redux/api/productsApiSlice";
 import AdminMenu from "./AdminMenu";
 
 const AllProducts = () => {
@@ -31,7 +31,7 @@ const AllProducts = () => {
                 >
                   <div className="flex">
                     <img
-                      src={product?.image}
+                      src={product.image}
                       alt={product.name}
                       className="w-[10rem] object-cover"
                     />

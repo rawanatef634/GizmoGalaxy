@@ -13,7 +13,7 @@ import {
   removeFavoriteFromLocalStorage,
 } from "../../Utils/localStorage";
 
-const HeartIcon = ({ product }) => {
+const HeartIcon = ({product}) => {
   const dispatch = useDispatch();
   const favorites = useSelector((state) => state.favorites) || [];
   const isFavorite = favorites.some((p) => p._id === product._id);
@@ -26,14 +26,12 @@ const HeartIcon = ({ product }) => {
   const toggleFavorites = () => {
     if (isFavorite) {
       dispatch(removeFromFavorites(product));
-      // remove the product from the localStorage as well
-      removeFavoriteFromLocalStorage(product._id);
+      removeFavoriteFromLocalStorage(product);
     } else {
       dispatch(addToFavorites(product));
-      // add the product to localStorage as well
       addFavoriteToLocalStorage(product);
     }
-  };
+  }
 
   return (
     <div
@@ -47,6 +45,6 @@ const HeartIcon = ({ product }) => {
       )}
     </div>
   );
-};
+}
 
 export default HeartIcon;

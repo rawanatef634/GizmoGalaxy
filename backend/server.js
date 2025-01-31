@@ -2,7 +2,6 @@ import express from "express";
 import connectDB from "./config/db.js";
 import authRoutes from "./routes/authRoutes.js";
 import productRoutes from "./routes/productRoutes.js";
-import cartRoutes from "./routes/cartRoutes.js";
 import orderRoutes from "./routes/orderRoutes.js";
 import paymentRoutes from "./routes/paymentRoutes.js";
 import categoryRoutes from "./routes/categoryRoutes.js";
@@ -38,7 +37,6 @@ app.use(limiter);
 app.use("/api/auth", authRoutes);
 app.use("/api/products", productRoutes);
 app.use("/api/category", categoryRoutes);
-app.use("/api/carts", cartRoutes);
 app.use("/api/orders", orderRoutes);
 app.use("/api/payments", paymentRoutes);
 app.use('/api/upload', uploadRoutes)
@@ -48,7 +46,7 @@ app.use((req, res, next) => {
   next();
 });
 
-logger.info("Server is running on port 3000");
+logger.info("Server is running on port 5000");
 
 app.use("/uploads", express.static("uploads"));
 

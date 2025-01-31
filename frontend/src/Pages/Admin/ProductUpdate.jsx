@@ -60,13 +60,11 @@ const AdminProductUpdate = () => {
     try {
       const res = await uploadProductImage(formData).unwrap();
       toast.success("Item added successfully", {
-        position: toast.POSITION.TOP_RIGHT,
         autoClose: 2000,
       });
-      setImage(res.image);
+      setImage(res.imagePath);
     } catch (err) {
       toast.success("Item added successfully", {
-        position: toast.POSITION.TOP_RIGHT,
         autoClose: 2000,
       });
     }
@@ -90,12 +88,10 @@ const AdminProductUpdate = () => {
 
       if (data?.error) {
         toast.error(data.error, {
-          position: toast.POSITION.TOP_RIGHT,
           autoClose: 2000,
         });
       } else {
         toast.success(`Product successfully updated`, {
-          position: toast.POSITION.TOP_RIGHT,
           autoClose: 2000,
         });
         navigate("/admin/allproductslist");
@@ -103,7 +99,6 @@ const AdminProductUpdate = () => {
     } catch (err) {
       console.log(err);
       toast.error("Product update failed. Try again.", {
-        position: toast.POSITION.TOP_RIGHT,
         autoClose: 2000,
       });
     }
@@ -118,14 +113,12 @@ const AdminProductUpdate = () => {
 
       const { data } = await deleteProduct(params._id);
       toast.success(`"${data.name}" is deleted`, {
-        position: toast.POSITION.TOP_RIGHT,
         autoClose: 2000,
       });
       navigate("/admin/allproductslist");
     } catch (err) {
       console.log(err);
       toast.error("Delete failed. Try again.", {
-        position: toast.POSITION.TOP_RIGHT,
         autoClose: 2000,
       });
     }
